@@ -22,8 +22,8 @@ export function Hero() {
           className="h-full w-full bg-cover"
           style={{
             backgroundImage:
-              "url(https://images.unsplash.com/photo-1675712627095-6d35983176ae?w=2000&q=80&auto=format)",
-            backgroundPosition: "center 15%",
+              "url(https://images.unsplash.com/photo-1654765435666-72cb4e1f7ee3?w=2000&q=80&auto=format)",
+            backgroundPosition: "center 20%",
           }}
         />
       </motion.div>
