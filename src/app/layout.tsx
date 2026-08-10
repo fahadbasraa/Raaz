@@ -5,6 +5,7 @@ import { Curtain } from "@/components/curtain";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import { CartDrawer } from "@/components/cart-drawer";
 import { SessionProvider } from "next-auth/react";
+import { Analytics } from "@vercel/analytics/next";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -21,10 +22,34 @@ const jost = Jost({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const title = "RAAZ — Kept quiet, worn loudly";
+const description =
+  "RAAZ (راز) — quiet luxury, made slowly, in small numbers. An unveiling.";
+
 export const metadata: Metadata = {
-  title: "RAAZ — Kept quiet, worn loudly",
-  description:
-    "RAAZ (راز) — quiet luxury, made slowly, in small numbers. An unveiling.",
+  metadataBase: new URL(siteUrl),
+  title: { default: title, template: "%s — RAAZ" },
+  description,
+  openGraph: {
+    title,
+    description,
+    url: siteUrl,
+    siteName: "RAAZ",
+    type: "website",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=1200&q=80&auto=format",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -39,6 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SmoothScrollProvider>{children}</SmoothScrollProvider>
           <CartDrawer />
         </SessionProvider>
+        <Analytics />
       </body>
     </html>
   );

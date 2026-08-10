@@ -38,11 +38,15 @@ export function CheckoutClient({ userEmail }: { userEmail: string }) {
   const subtotal = cartSubtotal(items);
 
   const [address, setAddress] = useState<ShippingAddress>(emptyAddress);
+  const [discountCode, setDiscountCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [checkoutData, setCheckoutData] = useState<{
     clientSecret: string;
     orderId: string;
+    subtotal: number;
+    discountAmount: number;
+    total: number;
   } | null>(null);
 
   if (items.length === 0 && !checkoutData) {
@@ -75,6 +79,7 @@ export function CheckoutClient({ userEmail }: { userEmail: string }) {
           quantity: i.quantity,
         })),
         shippingAddress: address,
+        discountCode: discountCode || undefined,
       }),
     });
 
@@ -86,9 +91,19 @@ export function CheckoutClient({ userEmail }: { userEmail: string }) {
       return;
     }
 
-    setCheckoutData({ clientSecret: data.clientSecret, orderId: data.orderId });
+    setCheckoutData({
+      clientSecret: data.clientSecret,
+      orderId: data.orderId,
+      subtotal: data.subtotal,
+      discountAmount: data.discountAmount,
+      total: data.total,
+    });
     setSubmitting(false);
   }
+
+  const displaySubtotal = checkoutData?.subtotal ?? subtotal;
+  const displayDiscount = checkoutData?.discountAmount ?? 0;
+  const displayTotal = checkoutData?.total ?? subtotal;
 
   return (
     <div className="mt-14 grid grid-cols-1 gap-16 lg:grid-cols-[1fr_380px]">
@@ -141,6 +156,18 @@ export function CheckoutClient({ userEmail }: { userEmail: string }) {
                   label="Country"
                   value={address.country}
                   onChange={(v) => setAddress({ ...address, country: v })}
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className="eyebrow text-xs text-taupe">Discount code</p>
+              <div className="mt-4 max-w-xs">
+                <Field
+                  label="Code (optional)"
+                  value={discountCode}
+                  onChange={setDiscountCode}
+                  required={false}
                 />
               </div>
             </div>
@@ -216,15 +243,21 @@ export function CheckoutClient({ userEmail }: { userEmail: string }) {
         <div className="mt-8 flex flex-col gap-2 border-t border-ivory/10 pt-6 text-sm">
           <div className="flex items-center justify-between text-taupe">
             <span>Subtotal</span>
-            <span className="text-ivory">{formatPrice(subtotal)}</span>
+            <span className="text-ivory">{formatPrice(displaySubtotal)}</span>
           </div>
+          {displayDiscount > 0 && (
+            <div className="flex items-center justify-between text-taupe">
+              <span>Discount</span>
+              <span className="text-gold">−{formatPrice(displayDiscount)}</span>
+            </div>
+          )}
           <div className="flex items-center justify-between text-taupe">
             <span>Shipping</span>
             <span className="text-ivory">Free</span>
           </div>
           <div className="mt-2 flex items-center justify-between border-t border-ivory/10 pt-4 text-base">
             <span className="text-ivory">Total</span>
-            <span className="text-ivory">{formatPrice(subtotal)}</span>
+            <span className="text-ivory">{formatPrice(displayTotal)}</span>
           </div>
         </div>
       </div>

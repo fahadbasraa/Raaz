@@ -24,6 +24,7 @@ const bodySchema = z.object({
     )
     .min(1),
   shippingAddress: shippingAddressSchema,
+  discountCode: z.string().trim().toUpperCase().optional(),
 });
 
 export async function POST(request: Request) {
@@ -44,7 +45,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { items, shippingAddress } = parsed.data;
+  const { items, shippingAddress, discountCode } = parsed.data;
 
   const variants = await prisma.variant.findMany({
     where: { id: { in: items.map((i) => i.variantId) } },
@@ -81,10 +82,31 @@ export async function POST(request: Request) {
     );
   }
 
-  const total = items.reduce((sum, item) => {
+  const subtotal = items.reduce((sum, item) => {
     const variant = variantById.get(item.variantId)!;
     return sum + variant.price * item.quantity;
   }, 0);
+
+  let discountAmount = 0;
+  let appliedCode: string | null = null;
+
+  if (discountCode) {
+    const discount = await prisma.discountCode.findUnique({
+      where: { code: discountCode },
+    });
+
+    if (!discount || !discount.active || (discount.expiresAt && discount.expiresAt < new Date())) {
+      return NextResponse.json(
+        { message: "That code isn't valid — please check it and try again." },
+        { status: 400 },
+      );
+    }
+
+    discountAmount = Math.round((subtotal * discount.percentOff) / 100);
+    appliedCode = discount.code;
+  }
+
+  const total = subtotal - discountAmount;
 
   const order = await prisma.order.create({
     data: {
@@ -92,6 +114,8 @@ export async function POST(request: Request) {
       email: session.user.email ?? "",
       status: "pending",
       total,
+      discountCode: appliedCode,
+      discountAmount,
       shippingAddress,
       items: {
         create: items.map((item) => {
@@ -123,5 +147,7 @@ export async function POST(request: Request) {
     clientSecret: paymentIntent.client_secret,
     orderId: order.id,
     total,
+    subtotal,
+    discountAmount,
   });
 }

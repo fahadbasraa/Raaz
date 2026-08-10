@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
+import { sendOrderConfirmationEmail } from "@/lib/send-order-confirmation";
 
 export async function POST(request: Request) {
   if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) {
@@ -53,14 +54,14 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
     return;
   }
 
-  await prisma.$transaction(async (tx) => {
+  const justPaid = await prisma.$transaction(async (tx) => {
     const order = await tx.order.findUnique({
       where: { id: orderId },
       include: { items: true },
     });
 
     // Idempotent: Stripe may deliver this event more than once.
-    if (!order || order.status !== "pending") return;
+    if (!order || order.status !== "pending") return false;
 
     for (const item of order.items) {
       const result = await tx.variant.updateMany({
@@ -83,7 +84,17 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
       where: { id: orderId },
       data: { status: "paid" },
     });
+
+    return true;
   });
+
+  // Sent outside the transaction, and only on the transition into "paid" —
+  // never on a duplicate webhook delivery.
+  if (justPaid) {
+    await sendOrderConfirmationEmail(orderId).catch((err) => {
+      console.error("Failed to send order confirmation email:", err);
+    });
+  }
 }
 
 async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {

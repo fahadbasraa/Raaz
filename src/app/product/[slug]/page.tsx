@@ -26,8 +26,13 @@ export async function generateMetadata({
   if (!product) return {};
 
   return {
-    title: `${product.name} — RAAZ`,
+    title: product.name,
     description: product.description,
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      images: product.images[0] ? [{ url: product.images[0] }] : undefined,
+    },
   };
 }
 

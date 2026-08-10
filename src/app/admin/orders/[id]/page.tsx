@@ -49,6 +49,14 @@ export default async function AdminOrderDetailPage({
               </li>
             ))}
           </ul>
+          {order.discountAmount > 0 && (
+            <div className="mt-4 flex items-center justify-between text-sm">
+              <span className="text-taupe">
+                Discount {order.discountCode && `(${order.discountCode})`}
+              </span>
+              <span className="text-gold">−{formatPrice(order.discountAmount)}</span>
+            </div>
+          )}
           <div className="mt-4 flex items-center justify-between border-t border-ivory/10 pt-4 text-sm">
             <span className="text-ivory">Total</span>
             <span className="text-ivory">{formatPrice(order.total)}</span>
