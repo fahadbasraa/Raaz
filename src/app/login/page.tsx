@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -14,7 +15,9 @@ export default function LoginPage() {
             Sign in
           </h1>
 
-          <LoginForm />
+          <Suspense fallback={null}>
+            <LoginForm />
+          </Suspense>
 
           <p className="mt-8 text-center text-sm text-taupe">
             New to RAAZ?{" "}

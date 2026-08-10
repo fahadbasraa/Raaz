@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/account";
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
 
@@ -27,7 +29,7 @@ export function LoginForm() {
       return;
     }
 
-    router.push("/account");
+    router.push(callbackUrl);
     router.refresh();
   }
 
