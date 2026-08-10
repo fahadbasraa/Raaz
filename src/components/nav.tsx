@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import { useCartStore, cartCount } from "@/store/cart";
 
 export function Nav() {
   const [solid, setSolid] = useState(false);
+  const { data: session } = useSession();
   const items = useCartStore((s) => s.items);
   const openCart = useCartStore((s) => s.open);
   const lastAddedAt = useCartStore((s) => s.lastAddedAt);
@@ -50,8 +52,11 @@ export function Nav() {
         </div>
 
         <div className="eyebrow flex items-center gap-6 text-xs text-ivory/80">
-          <Link href="/account" className="transition-colors hover:text-gold">
-            Account
+          <Link
+            href={session?.user ? "/account" : "/login"}
+            className="transition-colors hover:text-gold"
+          >
+            {session?.user ? "Account" : "Sign in"}
           </Link>
           <button
             type="button"

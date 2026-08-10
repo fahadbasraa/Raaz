@@ -4,6 +4,7 @@ import "./globals.css";
 import { Curtain } from "@/components/curtain";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import { CartDrawer } from "@/components/cart-drawer";
+import { SessionProvider } from "next-auth/react";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -33,9 +34,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${cormorant.variable} ${jost.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-base text-ivory font-ui">
-        <Curtain />
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
-        <CartDrawer />
+        <SessionProvider>
+          <Curtain />
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+          <CartDrawer />
+        </SessionProvider>
       </body>
     </html>
   );
