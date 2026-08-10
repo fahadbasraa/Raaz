@@ -46,3 +46,6 @@ next-env.d.ts
 /.claude/skills/
 /.windsurf/skills/
 skills-lock.json
+
+# Claude Code harness artifacts
+/.claude/scheduled_tasks.lock

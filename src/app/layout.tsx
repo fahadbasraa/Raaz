@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=1200&q=80&auto=format",
+        url: "https://images.unsplash.com/photo-1761437532658-61607fe8b546?w=1200&q=80&auto=format",
         width: 1200,
         height: 630,
       },

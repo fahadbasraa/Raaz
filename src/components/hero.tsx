@@ -19,10 +19,11 @@ export function Hero() {
         transition={{ duration: 22, ease: "linear" }}
       >
         <div
-          className="h-full w-full bg-cover bg-center"
+          className="h-full w-full bg-cover"
           style={{
             backgroundImage:
-              "url(https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=2000&q=80&auto=format)",
+              "url(https://images.unsplash.com/photo-1761437532658-61607fe8b546?w=2000&q=80&auto=format)",
+            backgroundPosition: "center 25%",
           }}
         />
       </motion.div>
