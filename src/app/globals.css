@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* emerald-noir palette (raw values — themeable, e.g. for future overrides) */
+  --raw-base: #0e1512;
+  --raw-surface: #15201b;
+  --raw-surface-2: #1a2620;
+  --raw-ivory: #ede7db;
+  --raw-taupe: #8b9089;
+  --raw-gold: #c9a96a;
+  --raw-emerald-deep: #1e3a2e;
+  --raw-emerald-deep-2: #17332a;
+
+  /* motion */
+  --ease-out-slow: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-base: var(--raw-base);
+  --color-surface: var(--raw-surface);
+  --color-surface-2: var(--raw-surface-2);
+  --color-ivory: var(--raw-ivory);
+  --color-taupe: var(--raw-taupe);
+  --color-gold: var(--raw-gold);
+  --color-emerald-deep: var(--raw-emerald-deep);
+  --color-emerald-deep-2: var(--raw-emerald-deep-2);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-cormorant);
+  --font-ui: var(--font-jost);
+
+  --ease-out-slow: var(--ease-out-slow);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--raw-base);
+  color: var(--raw-ivory);
+}
+
+/* Eyebrow / label style: uppercase, wide tracking, UI font */
+.eyebrow {
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
