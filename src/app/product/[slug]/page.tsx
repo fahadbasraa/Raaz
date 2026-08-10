@@ -74,6 +74,9 @@ export default async function ProductPage({
 
             <div className="mt-10 max-w-sm">
               <VariantSelector
+                productName={product.name}
+                productSlug={product.slug}
+                image={product.images[0] ?? ""}
                 variants={product.variants.map((v) => ({
                   id: v.id,
                   size: v.size,

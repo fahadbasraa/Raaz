@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { formatPrice } from "@/lib/format";
+import { useCartStore } from "@/store/cart";
 
 type Variant = {
   id: string;
@@ -11,7 +12,18 @@ type Variant = {
   stock: number;
 };
 
-export function VariantSelector({ variants }: { variants: Variant[] }) {
+export function VariantSelector({
+  variants,
+  productName,
+  productSlug,
+  image,
+}: {
+  variants: Variant[];
+  productName: string;
+  productSlug: string;
+  image: string;
+}) {
+  const addItem = useCartStore((s) => s.addItem);
   const colors = useMemo(
     () => [...new Set(variants.map((v) => v.color))],
     [variants],
@@ -89,6 +101,18 @@ export function VariantSelector({ variants }: { variants: Variant[] }) {
         type="button"
         disabled={!selected}
         aria-disabled={!selected}
+        onClick={() => {
+          if (!selected) return;
+          addItem({
+            variantId: selected.id,
+            productSlug,
+            name: productName,
+            image,
+            size: selected.size,
+            color: selected.color,
+            price: selected.price,
+          });
+        }}
         className="eyebrow mt-10 w-full border border-ivory/40 py-4 text-xs text-ivory transition-colors hover:border-gold hover:text-gold disabled:cursor-not-allowed disabled:opacity-40"
       >
         {selected ? "Add to Bag" : "Select a size"}

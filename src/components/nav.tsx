@@ -2,9 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useCartStore, cartCount } from "@/store/cart";
 
 export function Nav() {
   const [solid, setSolid] = useState(false);
+  const items = useCartStore((s) => s.items);
+  const openCart = useCartStore((s) => s.open);
+  const lastAddedAt = useCartStore((s) => s.lastAddedAt);
+  const count = cartCount(items);
 
   useEffect(() => {
     function onScroll() {
@@ -47,13 +53,25 @@ export function Nav() {
           <Link href="/account" className="transition-colors hover:text-gold">
             Account
           </Link>
-          <Link
-            href="/cart"
-            aria-label="View bag"
-            className="transition-colors hover:text-gold"
+          <button
+            type="button"
+            onClick={openCart}
+            aria-label={`View bag, ${count} item${count === 1 ? "" : "s"}`}
+            className="flex items-center gap-1.5 transition-colors hover:text-gold"
           >
             Bag
-          </Link>
+            {count > 0 && (
+              <motion.span
+                key={lastAddedAt}
+                initial={{ scale: 1.5 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[10px] font-medium text-base"
+              >
+                {count}
+              </motion.span>
+            )}
+          </button>
         </div>
       </nav>
     </header>
