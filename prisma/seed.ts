@@ -79,7 +79,7 @@ const products: ProductSeed[] = [
     basePrice: 42000,
     colorImages: {
       Ivory: [
-        "https://images.unsplash.com/photo-1756749037533-0019e951a835?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1695832293258-5353409ca77e?w=1600&q=80&auto=format",
       ],
       Emerald: [
         "https://images.unsplash.com/photo-1720022785516-9653ead7180c?w=1600&q=80&auto=format",
