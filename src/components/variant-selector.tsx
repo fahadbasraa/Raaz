@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { formatPrice } from "@/lib/format";
 import { useCartStore } from "@/store/cart";
+import { SizeGuide } from "@/components/size-guide";
 
 type Variant = {
   id: string;
@@ -77,7 +78,10 @@ export function VariantSelector({
       </div>
 
       <div className="mt-6">
-        <p className="eyebrow text-[11px] text-taupe">Size</p>
+        <div className="flex items-center justify-between">
+          <p className="eyebrow text-[11px] text-taupe">Size</p>
+          <SizeGuide />
+        </div>
         <div className="mt-3 flex flex-wrap gap-2">
           {sizes.map((s) => {
             const disabled = !availableSizesForColor.has(s);

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Reveal } from "@/components/reveal";
 import { VariantSelector } from "@/components/variant-selector";
+import { WishlistButton } from "@/components/wishlist-button";
 
 type Variant = {
   id: string;
@@ -56,7 +57,16 @@ export function ProductView({
       </Reveal>
 
       <Reveal delay={0.1} className="lg:sticky lg:top-32 lg:self-start">
-        <p className="eyebrow text-xs text-gold">{categoryName}</p>
+        <div className="flex items-start justify-between gap-4">
+          <p className="eyebrow text-xs text-gold">{categoryName}</p>
+          <WishlistButton
+            productSlug={productSlug}
+            name={productName}
+            image={images[0] ?? ""}
+            price={variants[0]?.price ?? 0}
+            className="text-ivory/70 transition-colors hover:text-gold"
+          />
+        </div>
         <h1 className="mt-3 font-display text-4xl font-light text-ivory sm:text-5xl">
           {productName}
         </h1>

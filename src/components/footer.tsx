@@ -41,6 +41,11 @@ export function Footer() {
                   Bag
                 </Link>
               </li>
+              <li>
+                <Link href="/wishlist" className="transition-colors hover:text-gold">
+                  Saved
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -55,6 +60,11 @@ export function Footer() {
               <li>
                 <Link href="/terms" className="transition-colors hover:text-gold">
                   Terms
+                </Link>
+              </li>
+              <li>
+                <Link href="/returns" className="transition-colors hover:text-gold">
+                  Returns
                 </Link>
               </li>
             </ul>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
+import { WishlistButton } from "@/components/wishlist-button";
 
 export function ProductCard({
   slug,
@@ -31,6 +32,13 @@ export function ProductCard({
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+        />
+        <WishlistButton
+          productSlug={slug}
+          name={name}
+          image={image}
+          price={minPrice}
+          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center bg-base/50 text-ivory backdrop-blur-sm transition-colors hover:text-gold"
         />
       </div>
       <div className="mt-4 flex items-start justify-between gap-4">

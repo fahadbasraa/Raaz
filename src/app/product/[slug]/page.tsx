@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { ProductView } from "@/components/product-view";
+import { RelatedProducts } from "@/components/related-products";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +79,10 @@ export default async function ProductPage({
             price: v.price,
             stock: v.stock,
           }))}
+        />
+        <RelatedProducts
+          categoryId={product.categoryId}
+          excludeProductId={product.id}
         />
       </main>
       <Footer />

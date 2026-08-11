@@ -1,12 +1,25 @@
 import { prisma } from "@/lib/prisma";
-import { ProductCard } from "@/components/product-card";
 import { Reveal } from "@/components/reveal";
+import { CollectionGridClient } from "@/components/collection-grid-client";
 
 export async function CollectionGrid() {
   const products = await prisma.product.findMany({
     where: { published: true },
     include: { category: true, variants: true },
     orderBy: { createdAt: "asc" },
+  });
+
+  const summaries = products.map((product) => {
+    const prices = product.variants.map((v) => v.price);
+    return {
+      id: product.id,
+      slug: product.slug,
+      name: product.name,
+      image: product.images[0] ?? "",
+      categoryName: product.category.name,
+      minPrice: prices.length ? Math.min(...prices) : product.basePrice,
+      maxPrice: prices.length ? Math.max(...prices) : product.basePrice,
+    };
   });
 
   return (
@@ -20,35 +33,12 @@ export async function CollectionGrid() {
           </h2>
         </Reveal>
 
-        {products.length === 0 ? (
+        {summaries.length === 0 ? (
           <p className="mt-16 text-sm text-taupe">
             The atelier is between collections. Nothing is published yet.
           </p>
         ) : (
-          <div className="mt-16 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-            {products.map((product, i) => {
-              const prices = product.variants.map((v) => v.price);
-              const minPrice = prices.length
-                ? Math.min(...prices)
-                : product.basePrice;
-              const maxPrice = prices.length
-                ? Math.max(...prices)
-                : product.basePrice;
-
-              return (
-                <Reveal key={product.id} delay={(i % 4) * 0.08}>
-                  <ProductCard
-                    slug={product.slug}
-                    name={product.name}
-                    image={product.images[0] ?? ""}
-                    categoryName={product.category.name}
-                    minPrice={minPrice}
-                    maxPrice={maxPrice}
-                  />
-                </Reveal>
-              );
-            })}
-          </div>
+          <CollectionGridClient products={summaries} />
         )}
       </div>
     </section>
