@@ -66,7 +66,7 @@ export default async function EditProductPage({
           />
           <div>
             <label className="eyebrow text-[11px] text-taupe">
-              Image URLs (one per line)
+              Image URLs (one per line, fallback gallery)
             </label>
             <textarea
               name="images"
@@ -75,6 +75,25 @@ export default async function EditProductPage({
               defaultValue={product.images.join("\n")}
               className="mt-2 w-full border border-ivory/20 bg-transparent p-3 text-sm text-ivory focus:border-gold focus:outline-none"
             />
+          </div>
+          <div>
+            <label className="eyebrow text-[11px] text-taupe">
+              Images by color (one color per line — Color: url1, url2)
+            </label>
+            <textarea
+              name="colorImages"
+              rows={4}
+              placeholder={"Black: https://…, https://…\nMoss: https://…"}
+              defaultValue={colorImagesToText(
+                (product.colorImages ?? {}) as Record<string, string[]>,
+              )}
+              className="mt-2 w-full border border-ivory/20 bg-transparent p-3 text-sm text-ivory focus:border-gold focus:outline-none"
+            />
+            <p className="mt-2 text-[11px] text-taupe">
+              Shoppers see these instead of the fallback gallery when they
+              select that color. Leave a color out to fall back to the
+              gallery above.
+            </p>
           </div>
           <label className="flex items-center gap-3 text-sm text-ivory">
             <input
@@ -215,6 +234,12 @@ function TextField({
       />
     </div>
   );
+}
+
+function colorImagesToText(colorImages: Record<string, string[]>): string {
+  return Object.entries(colorImages)
+    .map(([color, urls]) => `${color}: ${urls.join(", ")}`)
+    .join("\n");
 }
 
 function MiniField({

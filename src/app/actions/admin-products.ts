@@ -29,6 +29,24 @@ function dollarsToCents(value: FormDataEntryValue | null): number {
   return Math.round(n * 100);
 }
 
+function parseColorImages(raw: string): Record<string, string[]> {
+  const result: Record<string, string[]> = {};
+  for (const line of raw.split("\n")) {
+    const separatorIndex = line.indexOf(":");
+    if (separatorIndex === -1) continue;
+
+    const color = line.slice(0, separatorIndex).trim();
+    const urls = line
+      .slice(separatorIndex + 1)
+      .split(",")
+      .map((u) => u.trim())
+      .filter(Boolean);
+
+    if (color && urls.length > 0) result[color] = urls;
+  }
+  return result;
+}
+
 const productSchema = z.object({
   name: z.string().trim().min(1),
   slug: z.string().trim().min(1),
@@ -88,6 +106,11 @@ export async function createProduct(formData: FormData) {
   redirect(`/admin/products/${product.id}/edit`);
 }
 
+const colorImagesSchema = z.record(
+  z.string().trim().min(1),
+  z.array(z.string().trim().url()).min(1),
+);
+
 export async function updateProduct(formData: FormData) {
   await requireAdmin();
 
@@ -96,6 +119,7 @@ export async function updateProduct(formData: FormData) {
     .split("\n")
     .map((s) => s.trim())
     .filter(Boolean);
+  const colorImagesRaw = parseColorImages(String(formData.get("colorImages") ?? ""));
 
   const parsed = productSchema.safeParse({
     name: formData.get("name"),
@@ -111,6 +135,14 @@ export async function updateProduct(formData: FormData) {
     throw new Error(parsed.error.issues[0]?.message ?? "Invalid product data.");
   }
 
+  const colorImagesParsed = colorImagesSchema.safeParse(colorImagesRaw);
+  if (!colorImagesParsed.success) {
+    throw new Error(
+      colorImagesParsed.error.issues[0]?.message ??
+        "Invalid image URL in the images-by-color field.",
+    );
+  }
+
   const { categoryName, ...data } = parsed.data;
   const categorySlug = slugify(categoryName);
 
@@ -123,7 +155,11 @@ export async function updateProduct(formData: FormData) {
   try {
     await prisma.product.update({
       where: { id },
-      data: { ...data, categoryId: category.id },
+      data: {
+        ...data,
+        colorImages: colorImagesParsed.data,
+        categoryId: category.id,
+      },
     });
   } catch (error) {
     if (isUniqueSlugError(error)) {

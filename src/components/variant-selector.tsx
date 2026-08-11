@@ -17,11 +17,15 @@ export function VariantSelector({
   productName,
   productSlug,
   image,
+  color,
+  onColorChange,
 }: {
   variants: Variant[];
   productName: string;
   productSlug: string;
   image: string;
+  color: string;
+  onColorChange: (color: string) => void;
 }) {
   const addItem = useCartStore((s) => s.addItem);
   const colors = useMemo(
@@ -33,7 +37,6 @@ export function VariantSelector({
     [variants],
   );
 
-  const [color, setColor] = useState(colors[0]);
   const [size, setSize] = useState<string | null>(null);
 
   const selected = variants.find((v) => v.color === color && v.size === size);
@@ -56,7 +59,10 @@ export function VariantSelector({
             <button
               key={c}
               type="button"
-              onClick={() => setColor(c)}
+              onClick={() => {
+                onColorChange(c);
+                setSize(null);
+              }}
               aria-pressed={c === color}
               className={`eyebrow border px-4 py-2 text-[11px] transition-colors ${
                 c === color
