@@ -28,7 +28,7 @@ const products: ProductSeed[] = [
         "https://images.unsplash.com/photo-1683642765591-2370edc15193?w=1600&q=80&auto=format",
       ],
       Moss: [
-        "https://images.unsplash.com/photo-1683642766177-8ae7c4be03cb?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1707085673015-4ac59b2ccbae?w=1600&q=80&auto=format",
       ],
     },
     sizes: SIZES,
@@ -64,7 +64,7 @@ const products: ProductSeed[] = [
         "https://images.unsplash.com/photo-1764698072732-ea0230fc5d8e?w=1600&q=80&auto=format",
       ],
       Taupe: [
-        "https://images.unsplash.com/photo-1743097765313-f4b05d74a873?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1741605037162-b1f475a4a4d3?w=1600&q=80&auto=format",
       ],
     },
     sizes: SIZES,
@@ -97,7 +97,7 @@ const products: ProductSeed[] = [
     basePrice: 36000,
     colorImages: {
       Black: [
-        "https://images.unsplash.com/photo-1718278867451-0af1bcb0dfc5?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1778327524408-e4bdf7b11e0a?w=1600&q=80&auto=format",
       ],
       Bone: [
         "https://images.unsplash.com/photo-1756887267535-6e25b59fe9c6?w=1600&q=80&auto=format",
@@ -115,10 +115,10 @@ const products: ProductSeed[] = [
     basePrice: 54000,
     colorImages: {
       Olive: [
-        "https://images.unsplash.com/photo-1525428419170-426069658049?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1595790751261-34700598471d?w=1600&q=80&auto=format",
       ],
       Black: [
-        "https://images.unsplash.com/photo-1596654581115-8059f03c8b4e?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1715622053361-4baf5ad2c51a?w=1600&q=80&auto=format",
       ],
     },
     sizes: SIZES,
@@ -134,7 +134,7 @@ const products: ProductSeed[] = [
     colorImages: {
       Charcoal: [
         "https://images.unsplash.com/photo-1644269444230-c6d1f2722e10?w=1600&q=80&auto=format",
-        "https://images.unsplash.com/photo-1543811421-215d504c36f3?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1675408824613-27a7e7b8d475?w=1600&q=80&auto=format",
       ],
     },
     sizes: ["One Size"],
